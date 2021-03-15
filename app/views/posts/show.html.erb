@@ -7,26 +7,25 @@
 <li><%= category.name %></li>
 <% end %>
 </ul>
-<ul>
+
+ <ul>
 <% @post.comments.each do |comment| %>
-<>
 <li><%= comment.user.username %> says: <%= comment.content %></li>
 <% end %>
-</ul>
+</ul> 
 
-<%= form_for @comment do |comment| %>
-<%= comment.text_field :user_username list: "users_autocomplete" %>
-<datalist id="users_autocomplete" >
-<% User.all.each do |user| %>
-<option value="<%= user.username %>">
+<%= form_for @post.comments.build do |f| %>
+<%= f.hidden_field :post_id, value: @post.id %> 
+<%= f.label "Choose User" %>
+<%= f.collection_select :user_id, User.all, :id, :username, { include_blank: 'blank field' }%>
+
+<%= f.fields_for :user, User.new do |post_user|%>
+<div><%= post_user.label "Create User" %>
+<%= post_user.text_field :username %></div>
 <% end %>
-</datalist>
 
-
-
-<%= comment.hidden_field :post_id, value: @post.id %> 
-<%= comment.label "Comment" %>
-<%= comment.text_area :content %>
-<%= comment.submit %>
+<%= f.label "Comment" %>
+<%= f.text_area :content %>
+<%= f.submit "Create Comment" %>
 <% end %>
 
