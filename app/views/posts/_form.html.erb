@@ -1,1 +1,16 @@
+<h1>New Posts Form</h1>
 
+<%= form_for @post do |post|%>
+
+<div><%= post.label "Title" %>
+    <%= post.text_field :title %></div>
+
+<div><%= post.label "Content" %>
+    <%= post.text_area :content %></div>
+
+<div><%= post.label "Category" %>
+    <%= post.collection_check_boxes :category_ids, Category.all, :id, :name %></div>
+
+
+<%= post.submit %>
+<% end %>
